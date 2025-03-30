@@ -1,27 +1,37 @@
-import { View, Image, StyleSheet, Text } from "react-native";
-import { FC } from "react";
+import { View, Image, StyleSheet, Text, Alert } from "react-native";
+import { FC, useEffect } from "react";
 import logo from "@/assets/images/logotipo.png";
 import { ButtonLogin, Input } from "@/presentation/atomic/atoms";
 import { PublicScreenTemplate } from "@/presentation/atomic/templates";
 import { Theme } from "@/themes/Colors";
 import { useForm, Controller, Form } from "react-hook-form";
-import { Schema, z } from "zod";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-const loginSchema = z.object({
+const schema = z.object({
   email: z.string().email(),
   password: z.string(),
 });
 
-type LoginSchema = z.infer<typeof loginSchema>;
+type LoginSchema = z.infer<typeof schema>;
 
 export const LoginTemplate: FC = () => {
-  const { control, handleSubmit } = useForm<LoginSchema>({
-    resolver: zodResolver(loginSchema),
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginSchema>({
+    resolver: zodResolver(schema),
   });
 
-  const handleLogin = (data: LoginSchema) => {
-    console.log(data);
+  useEffect(() => {
+    if (errors.email) {
+      Alert.alert("Erro", "Insira um email válido");
+    }
+  }, [errors]);
+
+  const handleLogin = ({ email, password }: LoginSchema) => {
+    console.log("teste");
   };
   return (
     <PublicScreenTemplate>
@@ -43,7 +53,7 @@ export const LoginTemplate: FC = () => {
               render={({ field }) => (
                 <Input
                   value={field.value}
-                  onChange={field.onChange}
+                  onChangeText={field.onChange}
                   placeholder="Usuario"
                   isPassword={false}
                 />
@@ -55,7 +65,7 @@ export const LoginTemplate: FC = () => {
               render={({ field }) => (
                 <Input
                   value={field.value}
-                  onChange={field.onChange}
+                  onChangeText={field.onChange}
                   placeholder="Senha"
                   isPassword={true}
                 />

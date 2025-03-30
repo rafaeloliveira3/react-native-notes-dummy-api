@@ -9,9 +9,11 @@ import { FC, useState } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Theme } from "@/themes/Colors";
 
-type inputProps = TextInputProps & {
+type inputProps = {
   placeholder?: string;
   isPassword: boolean;
+  value: string;
+  onChangeText: (value: string) => void;
 };
 
 export const Input: FC<inputProps> = ({
@@ -19,7 +21,6 @@ export const Input: FC<inputProps> = ({
   onChangeText,
   placeholder,
   isPassword,
-  ...rest
 }) => {
   const [secret, isSecret] = useState<boolean>(isPassword);
 
@@ -31,7 +32,6 @@ export const Input: FC<inputProps> = ({
         style={styles.input}
         value={value}
         onChangeText={onChangeText}
-        {...rest}
       />
       {isPassword ? (
         <TouchableOpacity

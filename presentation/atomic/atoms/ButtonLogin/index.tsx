@@ -4,11 +4,11 @@ import { FC } from "react";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { TouchableOpacityProps } from "react-native-gesture-handler";
 
-type ButtonLoginProps = TouchableOpacityProps & {
+type ButtonLoginProps = {
   onPress?: () => void;
 };
 
-export const ButtonLogin: FC = ({ onPress }: ButtonLoginProps) => {
+export const ButtonLogin: FC<ButtonLoginProps> = ({ onPress }) => {
   return (
     <TouchableOpacity
       style={styles.button}
