@@ -4,9 +4,11 @@ import logo from "@/assets/images/logotipo.png";
 import { ButtonLogin, Input } from "@/presentation/atomic/atoms";
 import { PublicScreenTemplate } from "@/presentation/atomic/templates";
 import { Theme } from "@/themes/Colors";
-import { useForm, Controller, Form } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { userAuth } from "@/service/firebase";
+import { useRouter } from "expo-router";
 
 const schema = z.object({
   email: z.string().email(),
@@ -16,6 +18,8 @@ const schema = z.object({
 type LoginSchema = z.infer<typeof schema>;
 
 export const LoginTemplate: FC = () => {
+  const router = useRouter();
+
   const {
     control,
     handleSubmit,
@@ -30,8 +34,11 @@ export const LoginTemplate: FC = () => {
     }
   }, [errors]);
 
-  const handleLogin = ({ email, password }: LoginSchema) => {
-    console.log("teste");
+  const handleLogin = async ({ email, password }: LoginSchema) => {
+    const { error, userID } = await userAuth({ email, password });
+    if (!error && userID) {
+      router.replace("/(private)");
+    }
   };
   return (
     <PublicScreenTemplate>

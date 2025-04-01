@@ -14,8 +14,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Ubuntu_500Medium, Ubuntu_400Regular } from "@expo-google-fonts/ubuntu";
 import { Theme } from "@/themes/Colors";
+import { NotesProvider } from "@/data";
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
+export const unstable_settings = {
+  initialRouteName: "(private)/index",
+};
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -38,15 +43,17 @@ export default function RootLayout() {
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <SafeAreaView style={{ flex: 1 }}>
         <StatusBar style="light" backgroundColor={Theme.default} />
-        <Stack
-          initialRouteName="(public)"
-          screenOptions={{
-            headerShown: false,
-          }}
-        >
-          <Stack.Screen name="(public)" />
-          <Stack.Screen name="+not-found" />
-        </Stack>
+        <NotesProvider>
+          <Stack
+            screenOptions={{
+              headerShown: false,
+            }}
+          >
+            <Stack.Screen name="(public)/index" />
+            <Stack.Screen name="(private)/index" />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+        </NotesProvider>
       </SafeAreaView>
     </ThemeProvider>
   );
