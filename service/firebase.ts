@@ -2,8 +2,8 @@ import { initializeApp } from "firebase/app";
 import {
   initializeAuth,
   signInWithEmailAndPassword,
-  setPersistence,
   getReactNativePersistence,
+  createUserWithEmailAndPassword,
 } from "firebase/auth";
 
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
@@ -31,6 +31,17 @@ interface AuthParams {
 
 export const userAuth = async ({ email, password }: AuthParams) => {
   return await signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      const user = userCredential.user;
+      return { error: false, userID: user.uid };
+    })
+    .catch((error) => {
+      return { error: true, userID: null };
+    });
+};
+
+export const userCreate = async ({ email, password }: AuthParams) => {
+  return await createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
       return { error: false, userID: user.uid };

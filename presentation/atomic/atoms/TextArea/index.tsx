@@ -1,13 +1,7 @@
-import {
-  View,
-  TextInput,
-  TextInputProps,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
-import { FC, useState } from "react";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Theme } from "@/themes/Colors";
+import { View, TextInput, StyleSheet } from "react-native";
+import { FC } from "react";
+import { Colors } from "@/themes/Colors";
+import { useColorScheme } from "@/hooks/useColorScheme";
 
 type textAreaProps = {
   placeholder?: string;
@@ -20,12 +14,27 @@ export const TextArea: FC<textAreaProps> = ({
   onChangeText,
   placeholder,
 }) => {
+  const colorScheme = useColorScheme();
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: Colors[colorScheme ?? "light"].cardBackground,
+          borderColor: Colors[colorScheme ?? "light"].text,
+        },
+      ]}
+    >
       <TextInput
         placeholder={placeholder}
-        style={styles.input}
+        style={[
+          styles.input,
+          {
+            color: Colors[colorScheme ?? "light"].text,
+          },
+        ]}
         value={value}
+        placeholderTextColor={Colors[colorScheme ?? "light"].text}
         onChangeText={onChangeText}
         multiline
       />
@@ -36,8 +45,6 @@ export const TextArea: FC<textAreaProps> = ({
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    backgroundColor: Theme.base,
-    borderColor: Theme.key,
     width: "100%",
     borderWidth: 1,
     borderRadius: 12,

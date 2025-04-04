@@ -1,28 +1,31 @@
-import { Theme } from "@/themes/Colors";
-import { Ubuntu_400Regular } from "@expo-google-fonts/ubuntu";
+import { Colors } from "@/themes/Colors";
+import { useColorScheme } from "@/hooks/useColorScheme";
 import { FC } from "react";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
-import { TouchableOpacityProps } from "react-native-gesture-handler";
 
-type ButtonLoginProps = {
+type ButtonProps = {
+  text?: string;
   onPress?: () => void;
 };
 
-export const ButtonLogin: FC<ButtonLoginProps> = ({ onPress }) => {
+export const Button: FC<ButtonProps> = ({ onPress, text }) => {
+  const colorScheme = useColorScheme();
   return (
     <TouchableOpacity
-      style={styles.button}
+      style={[
+        styles.button,
+        { backgroundColor: Colors[colorScheme ?? "light"].tint },
+      ]}
       activeOpacity={0.7}
       onPress={onPress}
     >
-      <Text style={{ color: Theme.base }}>Login</Text>
+      <Text style={{ color: Colors.primary.default }}>{text}</Text>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: Theme.default,
     alignItems: "center",
     paddingVertical: 8,
     paddingHorizontal: 24,

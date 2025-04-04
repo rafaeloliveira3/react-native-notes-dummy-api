@@ -15,7 +15,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/monocromatic-red.png",
         "backgroundColor": "#FF0A0A"
-      }
+      },
+      "package": "firebase.notes.test"
     },
     "web": {
       "bundler": "metro",
@@ -36,6 +37,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "b1977dec-4848-41e3-a0df-937c3c48a869"
+      }
     }
   }
 }

@@ -1,13 +1,8 @@
-import {
-  View,
-  TextInput,
-  TextInputProps,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { View, TextInput, StyleSheet, TouchableOpacity } from "react-native";
 import { FC, useState } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Theme } from "@/themes/Colors";
+import { Colors } from "@/themes/Colors";
+import { useColorScheme } from "@/hooks/useColorScheme";
 
 type inputProps = {
   placeholder?: string;
@@ -22,14 +17,29 @@ export const Input: FC<inputProps> = ({
   placeholder,
   isPassword,
 }) => {
+  const colorScheme = useColorScheme();
   const [secret, isSecret] = useState<boolean>(isPassword);
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: Colors[colorScheme ?? "light"].cardBackground,
+          borderColor: Colors[colorScheme ?? "light"].text,
+        },
+      ]}
+    >
       <TextInput
         placeholder={placeholder}
         secureTextEntry={secret}
-        style={styles.input}
+        style={[
+          styles.input,
+          {
+            color: Colors[colorScheme ?? "light"].text,
+          },
+        ]}
+        placeholderTextColor={Colors[colorScheme ?? "light"].text}
         value={value}
         onChangeText={onChangeText}
       />
@@ -42,7 +52,7 @@ export const Input: FC<inputProps> = ({
           <MaterialCommunityIcons
             name={secret ? "eye" : "eye-off"}
             size={28}
-            color="#000"
+            color={Colors[colorScheme ?? "light"].text}
           />
         </TouchableOpacity>
       ) : (
@@ -55,8 +65,6 @@ export const Input: FC<inputProps> = ({
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    backgroundColor: Theme.base,
-    borderColor: Theme.key,
     width: "100%",
     borderWidth: 1,
     borderRadius: 12,
@@ -64,7 +72,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
   },
   input: {
-    width: "90%",
+    flex: 1,
   },
   rightIcon: {
     padding: 4,

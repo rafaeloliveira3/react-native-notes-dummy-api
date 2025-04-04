@@ -5,20 +5,17 @@ import logoWhite from "@/assets/images/logo-white.png";
 import { PublicScreenTemplate } from "../PublicScreenTemplate";
 import { Colors } from "@/themes/Colors";
 import { useRouter } from "expo-router";
+import { RegisterForm } from "@/presentation/atomic/molecules/";
+
+import { useColorScheme } from "@/hooks/useColorScheme";
 import Animated, {
-  FadeIn,
   FadeInDown,
-  FadeInUp,
-  useAnimatedStyle,
   useSharedValue,
   withTiming,
+  useAnimatedStyle,
 } from "react-native-reanimated";
 
-import { LoginForm } from "@/presentation/atomic/molecules";
-import { useColorScheme } from "@/hooks/useColorScheme";
-import { transform } from "@babel/core";
-
-export const LoginTemplate: FC = () => {
+export const RegisterTemplate: FC = () => {
   const colorScheme = useColorScheme();
   const router = useRouter();
 
@@ -46,7 +43,7 @@ export const LoginTemplate: FC = () => {
           ]}
         >
           <Animated.Image
-            style={[logoAnimation]}
+            style={logoAnimation}
             source={colorScheme == "light" ? logo : logoWhite}
           ></Animated.Image>
           <View
@@ -62,12 +59,12 @@ export const LoginTemplate: FC = () => {
               { color: Colors[colorScheme ?? "light"].text },
             ]}
           >
-            ACESSE SUA CONTA
+            CRIAR NOVA CONTA
           </Text>
-          <LoginForm />
-          <TouchableOpacity onPress={() => router.push("/(public)/register")}>
+          <RegisterForm />
+          <TouchableOpacity onPress={() => router.replace("/(public)")}>
             <Text style={{ color: Colors[colorScheme ?? "light"].text }}>
-              Não tem uma conta? Crie uma!
+              Já tem uma conta? Faça login!
             </Text>
           </TouchableOpacity>
         </Animated.View>

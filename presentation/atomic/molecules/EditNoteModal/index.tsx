@@ -12,24 +12,30 @@ const schema = z.object({
   title: z.string().nonempty("Título é obrigatório"),
   description: z.string().nonempty("Descrição é obrigatória"),
 });
-type CreateNoteFormSchema = z.infer<typeof schema>;
+type EditNoteFormSchema = z.infer<typeof schema>;
 
-type CreateNoteFormProps = {
+type EditNoteFormProps = {
   closeModalFunction: () => void;
+  noteId?: number;
+  noteTitle?: string;
+  noteContent?: string;
 };
 
-export const CreateNoteForm: FC<CreateNoteFormProps> = ({
+export const EditNoteForm: FC<EditNoteFormProps> = ({
   closeModalFunction,
+  noteId,
+  noteContent,
+  noteTitle,
 }) => {
   const colorScheme = useColorScheme();
-  const { createNotes } = useNotes();
+  const { editNotes } = useNotes();
 
   const {
     control,
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm<CreateNoteFormSchema>({
+  } = useForm<EditNoteFormSchema>({
     resolver: zodResolver(schema),
   });
 
@@ -44,12 +50,22 @@ export const CreateNoteForm: FC<CreateNoteFormProps> = ({
     }
   }, [errors]);
 
-  const handleCreate = ({ title, description }: CreateNoteFormSchema) => {
-    createNotes({
-      userId: 1,
-      title: title,
-      body: description,
-    });
+  useEffect(() => {
+    setValue("title", noteTitle ? noteTitle : "");
+    setValue("description", noteContent ? noteContent : "");
+  }, []);
+
+  const handleEdit = ({ title, description }: EditNoteFormSchema) => {
+    if (noteId) {
+      editNotes(
+        {
+          userId: 1,
+          title: title,
+          body: description,
+        },
+        noteId
+      );
+    }
     closeModalFunction();
   };
 
@@ -85,7 +101,7 @@ export const CreateNoteForm: FC<CreateNoteFormProps> = ({
           )}
         />
       </View>
-      <Button onPress={handleSubmit(handleCreate)} text={"Adicionar"} />
+      <Button onPress={handleSubmit(handleEdit)} text={"Salvar"} />
     </>
   );
 };

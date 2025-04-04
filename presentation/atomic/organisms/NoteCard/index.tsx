@@ -1,27 +1,65 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+
+import { Colors } from "@/themes/Colors";
+import { useColorScheme } from "@/hooks/useColorScheme";
 
 type NoteCardProps = {
   title: string;
   description: string;
+  openModalFunction: () => void;
+  selectCurrentNote: () => void;
+  handleDeleteFunction?: () => void;
 };
 
-export const NoteCard: FC<NoteCardProps> = ({ title, description }) => {
-  const [showModal, setShowModal] = useState(false);
+export const NoteCard: FC<NoteCardProps> = ({
+  openModalFunction,
+  selectCurrentNote,
+  handleDeleteFunction,
+  title,
+  description,
+}) => {
+  const colorScheme = useColorScheme();
+  const editNoteHelpers = () => {
+    selectCurrentNote?.();
+    openModalFunction();
+  };
+
   return (
-    <TouchableOpacity activeOpacity={0.7} style={styles.cardContainer}>
-      <Text style={styles.title}>{title}</Text>
-      <Text style={styles.description}>{description}</Text>
+    <TouchableOpacity
+      activeOpacity={0.7}
+      style={[
+        styles.cardContainer,
+        { backgroundColor: Colors[colorScheme ?? "light"].cardBackground },
+      ]}
+    >
+      <Text
+        style={[styles.title, { color: Colors[colorScheme ?? "light"].text }]}
+      >
+        {title}
+      </Text>
+      <Text
+        style={[
+          styles.description,
+          { color: Colors[colorScheme ?? "light"].text },
+        ]}
+      >
+        {description}
+      </Text>
       <View style={styles.cardOptionContainer}>
         <TouchableOpacity
           activeOpacity={0.7}
           style={styles.cardOptionButton}
-          onPress={() => setShowModal(true)}
+          onPress={editNoteHelpers}
         >
           <MaterialIcons name="edit" size={18} />
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.7} style={styles.cardOptionButton}>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={styles.cardOptionButton}
+          onPress={handleDeleteFunction}
+        >
           <MaterialIcons name="delete" size={18} color={"#d42626"} />
         </TouchableOpacity>
       </View>
@@ -30,19 +68,11 @@ export const NoteCard: FC<NoteCardProps> = ({ title, description }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "flex-start",
-    padding: 18,
-    gap: 16,
-  },
   cardContainer: {
     width: "100%",
     padding: 16,
     gap: 8,
     borderRadius: 12,
-    backgroundColor: "#ffffff",
     elevation: 1,
   },
   title: {
@@ -52,54 +82,6 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 16,
     fontWeight: "normal",
-  },
-  addButton: {
-    backgroundColor: "#007AFF",
-    position: "absolute",
-    borderRadius: 50,
-    width: 56,
-    height: 56,
-    alignItems: "center",
-    justifyContent: "center",
-    bottom: 24,
-    right: 24,
-    elevation: 5,
-  },
-  addButtonText: {
-    color: "#ffffff",
-    fontSize: 28,
-  },
-  input: {
-    padding: 12,
-    borderRadius: 12,
-    borderColor: "#c3c3c3",
-    borderWidth: 1,
-    width: "100%",
-  },
-  textArea: {
-    padding: 12,
-    borderRadius: 12,
-    borderColor: "#c3c3c3",
-    borderWidth: 1,
-    width: "100%",
-    height: 100,
-    textAlignVertical: "top",
-  },
-  modalContainer: {
-    gap: 16,
-  },
-  button: {
-    width: "100%",
-    padding: 12,
-    borderRadius: 12,
-    backgroundColor: "#007AFF",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  buttonText: {
-    color: "#ffffff",
-    fontWeight: "bold",
-    fontSize: 16,
   },
   cardOptionContainer: {
     flexDirection: "row",

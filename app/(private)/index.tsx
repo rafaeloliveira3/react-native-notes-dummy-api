@@ -1,6 +1,5 @@
-import { StyleSheet } from "react-native";
-import CardsList from "@/presentation/atomic/templates/CardsList";
+import { CardsListTemplate } from "@/presentation/atomic/templates";
 
 export default function HomeScreen() {
-  return <CardsList />;
+  return <CardsListTemplate />;
 }

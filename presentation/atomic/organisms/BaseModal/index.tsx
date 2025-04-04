@@ -6,17 +6,28 @@ import {
   Pressable,
   StyleSheet,
 } from "react-native";
+import { Colors } from "@/themes/Colors";
+import { useColorScheme } from "@/hooks/useColorScheme";
 
 type BaseModalProps = ModalProps & {
   children: ReactNode;
 };
 
 export const BaseModal: FC<BaseModalProps> = ({ children, ...rest }) => {
+  const colorScheme = useColorScheme();
   return (
     <KeyboardAvoidingView>
       <Modal animationType="slide" transparent={true} {...rest}>
         <Pressable style={styles.modalContainer} onPress={rest.onRequestClose}>
-          <Pressable style={styles.modalBox} onPress={() => {}}>
+          <Pressable
+            style={[
+              styles.modalBox,
+              {
+                backgroundColor: Colors[colorScheme ?? "light"].cardBackground,
+              },
+            ]}
+            onPress={() => {}}
+          >
             {children}
           </Pressable>
         </Pressable>
@@ -33,7 +44,6 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalBox: {
-    backgroundColor: "white",
     borderRadius: 16,
     padding: 16,
     width: "90%",

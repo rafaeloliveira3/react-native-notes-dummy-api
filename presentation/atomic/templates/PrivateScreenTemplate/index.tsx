@@ -1,47 +1,65 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
   Text,
   Image,
   TouchableOpacity,
-  ScrollView,
+  Switch,
+  Appearance,
 } from "react-native";
 import logoMonocromatic from "@/assets/images/monocromatic-isotipo.png";
-import { Theme } from "@/themes/Colors";
-import { BaseModal } from "../../organisms";
-import { CreateNoteModal } from "../../molecules/CreateNoteModal";
+import { Colors } from "@/themes/Colors";
 
+import { useColorScheme } from "@/hooks/useColorScheme";
 type PrivateScreenTemplateProps = {
   children: React.ReactNode;
+  openCreateNotesModalFunction: () => void;
 };
 
 export const PrivateScreenTemplate: FC<PrivateScreenTemplateProps> = ({
   children,
+  openCreateNotesModalFunction,
 }) => {
-  const [showAddNotesModal, setShowAddNotesModal] = useState(false);
+  const colorScheme = useColorScheme();
+  const [themeSwitch, setThemeSwitch] = useState(
+    colorScheme === "light" ? false : true
+  );
+  const [isTheFirstLoad, setIsTheFirstLoad] = useState(true);
+
+  useEffect(() => {
+    if (isTheFirstLoad) {
+      setIsTheFirstLoad(false);
+      return;
+    }
+    colorScheme === "light"
+      ? Appearance.setColorScheme("dark")
+      : Appearance.setColorScheme("light");
+  }, [themeSwitch]);
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Image source={logoMonocromatic}></Image>
-      </View>
-      <Text style={styles.title}>Mural de Recados</Text>
-      <BaseModal
-        visible={showAddNotesModal}
-        onRequestClose={() => setShowAddNotesModal(false)}
-      >
-        <CreateNoteModal
-          closeModalFunction={() => setShowAddNotesModal(false)}
+        <Switch
+          value={themeSwitch}
+          onValueChange={() => setThemeSwitch(!themeSwitch)}
         />
-      </BaseModal>
+      </View>
+      <Text
+        style={[styles.title, { color: Colors[colorScheme ?? "light"].text }]}
+      >
+        Mural de Recados
+      </Text>
       {children}
       <TouchableOpacity
         activeOpacity={0.7}
-        style={styles.addButton}
-        onPress={() => setShowAddNotesModal(true)}
+        style={[styles.addButton, { backgroundColor: Colors.primary.tint }]}
+        onPress={openCreateNotesModalFunction}
       >
-        <Text style={styles.addButtonText}>+</Text>
+        <Text style={[styles.addButtonText, { color: Colors.primary.default }]}>
+          +
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -70,7 +88,6 @@ const styles = StyleSheet.create({
     fontFamily: "Ubuntu_500Medium",
   },
   addButton: {
-    backgroundColor: Theme.default,
     position: "absolute",
     borderRadius: 50,
     width: 56,
@@ -85,20 +102,6 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   addButtonText: {
-    color: Theme.base,
     fontSize: 28,
-  },
-  button: {
-    width: "100%",
-    padding: 12,
-    borderRadius: 12,
-    backgroundColor: Theme.default,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  buttonText: {
-    color: Theme.base,
-    fontWeight: "bold",
-    fontSize: 16,
   },
 });
