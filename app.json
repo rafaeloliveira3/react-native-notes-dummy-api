@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "firebase-notes",
-    "slug": "firebase-notes",
+    "name": "react-native-notes",
+    "slug": "react-native-notes",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/monocromatic-red.png",
@@ -16,7 +16,8 @@
         "foregroundImage": "./assets/images/monocromatic-red.png",
         "backgroundColor": "#FF0A0A"
       },
-      "package": "firebase.notes.test"
+      "package": "br.senai.sp.firebasenotes",
+      "versionCode": 1
     },
     "web": {
       "bundler": "metro",
@@ -43,7 +44,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "b1977dec-4848-41e3-a0df-937c3c48a869"
+        "projectId": "fca5bdee-2a07-4263-8606-94dbc6bd1758"
       }
     }
   }
